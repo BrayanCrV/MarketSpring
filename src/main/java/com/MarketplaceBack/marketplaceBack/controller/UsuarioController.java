@@ -14,7 +14,7 @@ import org.springframework.web.servlet.function.EntityResponse;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
@@ -23,7 +23,8 @@ public class UsuarioController {
 
     @GetMapping("/usuarios")
     public ResponseEntity<?> getAllUsuarios() {
-        return ResponseEntity.ok(usuarioService.getUsuarios());
+
+        System.out.println("Hola mundo");return ResponseEntity.ok(usuarioService.getUsuarios());
     }
 
     @GetMapping("/usuarios/{idUsuario}")
@@ -36,4 +37,15 @@ public class UsuarioController {
         }
         return ResponseEntity.noContent().build();
     }
+    @GetMapping("/usuariosN/{nickname}")
+    public ResponseEntity<?> getUsuario(@PathVariable String nickname ) {
+        new Usuario();
+        Optional<Usuario> User;
+        User = usuarioService.getUsuarioByNickname(nickname);
+        if ( User.isPresent()) {
+            return ResponseEntity.ok(User);
+        }
+        return ResponseEntity.noContent().build();
+    }
+
 }

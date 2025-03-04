@@ -18,7 +18,7 @@ public class ChatService {
         chatRepository.save(chat);
     }
 
-    public void deleteById(int id) {
+    public void deleteById(Integer id) {
         chatRepository.deleteById(id);
 
     }

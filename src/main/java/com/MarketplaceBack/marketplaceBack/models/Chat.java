@@ -17,16 +17,16 @@ public class Chat
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     @Column(name ="id")
-    private Integer id;
+    private Integer  id;
 
     @Column(name= "fecha", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, insertable = false )
     private LocalDateTime fecha;
 
     @Column(name = "idUsuario1")
-    private Integer idUsuario1;
+    private Integer  idUsuario1;
 
     @Column(name = "idUsuario2")
-    private Integer idUsuario2;
+    private Integer  idUsuario2;
 
     @Column(name = "mensaje")
     private String mensaje;

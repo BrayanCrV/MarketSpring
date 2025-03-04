@@ -1,5 +1,6 @@
 package com.MarketplaceBack.marketplaceBack.service;
 
+import com.MarketplaceBack.marketplaceBack.models.DTO.PublicacionDTO;
 import com.MarketplaceBack.marketplaceBack.models.Publicaciones;
 import com.MarketplaceBack.marketplaceBack.repository.PublicacionesRepository;
 import com.MarketplaceBack.marketplaceBack.repository.UsuarioRepository;
@@ -18,14 +19,16 @@ public class PublicacionesService {
     public List<Publicaciones> getAllPublicaciones() {
         return publicacionesRepository.findAll();
     }
-    public Optional<Publicaciones> getPublicacionById(int id) {
+    public Optional<Publicaciones> getPublicacionById(Integer id) {
         return publicacionesRepository.findById(id);
     }
-     public void saveOrUpdatePublicacion(Publicaciones publicacion) {
+    public void saveOrUpdatePublicacion(Publicaciones publicacion) {
         publicacionesRepository.save(publicacion);
      }
-
-     public void deletePublicacion(int id) {
+    public Optional<PublicacionDTO> getPublicacion(Integer ID) {
+        return publicacionesRepository.findPublicacion(ID);
+    }
+     public void deletePublicacion(Integer id) {
         publicacionesRepository.deleteById(id);
      }
 

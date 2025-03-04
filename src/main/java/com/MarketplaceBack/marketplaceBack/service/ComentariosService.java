@@ -1,6 +1,7 @@
 package com.MarketplaceBack.marketplaceBack.service;
 
 import com.MarketplaceBack.marketplaceBack.models.Comentarios;
+import com.MarketplaceBack.marketplaceBack.models.DTO.ComentarioDTO;
 import com.MarketplaceBack.marketplaceBack.repository.ComentariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,13 @@ public class ComentariosService {
     public List<Comentarios> getComentarios(){
         return comentariosRepository.findAll();
     }
-    public Optional<Comentarios> getComentariosById(int id){
+    public Optional<Comentarios> getComentariosById(Integer id){
         return comentariosRepository.findById(id);
     }
-    public List<Comentarios> getComentarioByPublicacion(int id){
+    public List<Comentarios> getComentarioByPublicacion(Integer id){
         return comentariosRepository.findByIdPublicacion(id);
+    }
+    public Optional<List<ComentarioDTO>> getComentariosWithNickname(Integer idPublicacion){
+        return comentariosRepository.findByPublicacionP(idPublicacion);
     }
 }

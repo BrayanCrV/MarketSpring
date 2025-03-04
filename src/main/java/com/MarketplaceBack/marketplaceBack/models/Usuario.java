@@ -17,11 +17,129 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 @Entity // Indica que esta clase es una entidad de JPA.
 @Table(name = "usuarios") // Especifica el nombre de la tabla en la base de datos que se asocia con esta entidad.
-@Data // Lombok: Genera automáticamente getters, setters, toString, equals y hashCode.
 @NoArgsConstructor // Lombok: Genera un constructor sin argumentos.
 @AllArgsConstructor // Lombok: Genera un constructor con todos los campos.
 @Builder
-public class Usuario implements UserDetails {
+public class Usuario {
+    public Integer getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getPass() {
+        return pass;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
+
+    public String getNombres() {
+        return nombres;
+    }
+
+    public void setNombres(String nombres) {
+        this.nombres = nombres;
+    }
+
+    public String getApellidoP() {
+        return apellidoP;
+    }
+
+    public void setApellidoP(String apellidoP) {
+        this.apellidoP = apellidoP;
+    }
+
+    public String getApellidoM() {
+        return apellidoM;
+    }
+
+    public void setApellidoM(String apellidoM) {
+        this.apellidoM = apellidoM;
+    }
+
+    public LocalDate getFechaN() {
+        return fechaN;
+    }
+
+    public void setFechaN(LocalDate fechaN) {
+        this.fechaN = fechaN;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public Tipo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getCalle() {
+        return calle;
+    }
+
+    public void setCalle(String calle) {
+        this.calle = calle;
+    }
+
+    public String getColonia() {
+        return colonia;
+    }
+
+    public void setColonia(String colonia) {
+        this.colonia = colonia;
+    }
+
+    public Integer getLote() {
+        return lote;
+    }
+
+    public void setLote(Integer lote) {
+        this.lote = lote;
+    }
+
+    public String getMunicipio() {
+        return municipio;
+    }
+
+    public void setMunicipio(String municipio) {
+        this.municipio = municipio;
+    }
+
+    public Boolean getVerificado() {
+        return verificado;
+    }
+
+    public void setVerificado(Boolean verificado) {
+        this.verificado = verificado;
+    }
 
     @Id // Indica que este campo es la clave primaria de la entidad.
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Define la estrategia de generación del valor (auto_increment en la BD).
@@ -30,7 +148,7 @@ public class Usuario implements UserDetails {
 
     @Column(name = "nickname", unique = true, nullable = false, length = 100)
     // Mapea a la columna "nickname": valor único, no nulo y con longitud máxima de 100.
-    private String username;
+    private String nickname;
 
     @Column(name = "pass", nullable = false, length = 257)
     // Mapea a la columna "pass": no nulo y con longitud máxima de 254.
@@ -86,40 +204,6 @@ public class Usuario implements UserDetails {
     // Mapea a la columna "verificado" que en MySQL se suele representar como tinyint(1).
     private Boolean verificado;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority((tipo.name())));
-    }
-
-    @Override
-    public String getPassword() {
-        return "";
-    }
-
-    @Override
-    public String getUsername() {
-        return "";
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true; //se comprueba con el token
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true; //se comprueba con el token
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true; //se comprueba con el token
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true; //se comprueba con el token
-    }
 
     /**
      * Enum que representa el tipo de usuario.

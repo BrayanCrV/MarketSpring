@@ -1,13 +1,17 @@
 package com.MarketplaceBack.marketplaceBack.controller;
 
+import com.MarketplaceBack.marketplaceBack.models.DTO.PublicacionDTO;
 import com.MarketplaceBack.marketplaceBack.models.Publicaciones;
 import com.MarketplaceBack.marketplaceBack.models.Usuario;
 import com.MarketplaceBack.marketplaceBack.repository.PublicacionesRepository;
 import com.MarketplaceBack.marketplaceBack.service.PublicacionesService;
+import com.nimbusds.jwt.JWTClaimsSet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.function.EntityResponse;
 
@@ -25,13 +29,15 @@ public class PublicacionController {
 
     @GetMapping("/publicaciones")
     public ResponseEntity<?> getPublicaciones() {
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return ResponseEntity.ok(publicacionesService.getAllPublicaciones());
     }
+
     @GetMapping("/publicaciones/{id}")
     public ResponseEntity<?> getPublicacionById(@PathVariable Integer id) {
-        new Publicaciones();
-        Optional<Publicaciones> publicacion;
-        publicacion = publicacionesService.getPublicacionById(id);
+        new PublicacionDTO();
+        Optional<PublicacionDTO> publicacion;
+        publicacion = publicacionesService.getPublicacion(id);
         if (publicacion.isPresent()) {
             return ResponseEntity.ok(publicacion);
         }
