@@ -5,9 +5,13 @@ import com.MarketplaceBack.marketplaceBack.models.Publicaciones;
 import com.MarketplaceBack.marketplaceBack.models.Usuario;
 import com.MarketplaceBack.marketplaceBack.repository.PublicacionesRepository;
 import com.MarketplaceBack.marketplaceBack.service.PublicacionesService;
+
 import com.nimbusds.jwt.JWTClaimsSet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -29,7 +33,7 @@ public class PublicacionController {
 
     @GetMapping("/publicaciones")
     public ResponseEntity<?> getPublicaciones() {
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
         return ResponseEntity.ok(publicacionesService.getAllPublicaciones());
     }
 
@@ -48,4 +52,12 @@ public class PublicacionController {
     public ResponseEntity<?> addPublicacion(@RequestBody Publicaciones publicacion) {
         publicacionesService.saveOrUpdatePublicacion(publicacion);
         return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(publicacion);
-    }}
+    }
+
+    @GetMapping("/publicacionesGuardadas")
+    public ResponseEntity<?> getPublicacionesGuardadas() {
+        String id = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        Integer idUsuario = Integer.valueOf(id);
+        return ResponseEntity.ok(publicacionesService.getPublicacionesGuardadas(idUsuario));
+    }
+}

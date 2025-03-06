@@ -10,5 +10,8 @@ import java.util.List;
 public interface GuardadosRepository extends JpaRepository<Guardados, Integer> {
     List<Guardados> findByIdUsuario(Integer idUsuario);
     boolean existsByIdUsuarioAndIdPublicacion(Integer idUsuario, Integer idPublicacion);
+    void deleteByIdPublicacionAndIdUsuario(Integer idPublicacion, Integer idUsuario);
+
+
 
 }

@@ -1,6 +1,9 @@
 package com.MarketplaceBack.marketplaceBack.models.DTO;
 
+
 import lombok.Data;
+
+
 
 @Data
     public class PublicacionDTO {

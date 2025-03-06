@@ -5,11 +5,10 @@ import com.MarketplaceBack.marketplaceBack.models.DTO.ComentarioDTO;
 import com.MarketplaceBack.marketplaceBack.service.ComentariosService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,12 +27,10 @@ public class ComentariosController {
         return ResponseEntity.ok(comentariosService.getComentarios());
     }
 
-    @GetMapping("/comentarios/{idPublicacion}")
-    public ResponseEntity<?> getComentariosById(@PathVariable Integer idPublicacion){
-        new Comentarios();
+    @GetMapping("/comentarios/{id}")
+    public ResponseEntity<?> getComentariosById(@PathVariable Long id){
         Optional<List<ComentarioDTO>> comentarios;
-        comentarios = comentariosService.getComentariosWithNickname(idPublicacion);
-        System.out.println("Hola");
+        comentarios = comentariosService.getComentariosWithNickname(id);
         if (comentarios.isPresent()) {
             return ResponseEntity.ok(comentarios);
         }
@@ -44,5 +41,21 @@ public class ComentariosController {
     public ResponseEntity<?> getComentariosByPublicacion(@PathVariable Integer id){
 
         return ResponseEntity.ok(comentariosService.getComentarioByPublicacion(id));
+    }
+
+    @PostMapping("/comentarios")
+    public ResponseEntity<?> addComentario(@RequestBody Comentarios comentario) {
+        String id = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        Integer idUsuario = Integer.valueOf(id);
+        comentario.setIdUsuario(idUsuario);
+        boolean isSaved = comentariosService.addComentario(comentario);
+
+        if (isSaved) {
+            // Si se guardó correctamente, devolvemos 201 Created con un mensaje
+            return ResponseEntity.status(HttpStatus.CREATED).body("Comentario guardado exitosamente");
+        } else {
+            // Si hubo un error, devolvemos 500 Internal Server Error con un mensaje
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo guardar el comentario");
+        }
     }
 }

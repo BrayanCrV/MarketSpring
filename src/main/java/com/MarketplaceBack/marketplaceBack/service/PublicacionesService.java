@@ -1,6 +1,7 @@
 package com.MarketplaceBack.marketplaceBack.service;
 
 import com.MarketplaceBack.marketplaceBack.models.DTO.PublicacionDTO;
+import com.MarketplaceBack.marketplaceBack.models.DTO.PublicacionGDTO;
 import com.MarketplaceBack.marketplaceBack.models.Publicaciones;
 import com.MarketplaceBack.marketplaceBack.repository.PublicacionesRepository;
 import com.MarketplaceBack.marketplaceBack.repository.UsuarioRepository;
@@ -32,5 +33,7 @@ public class PublicacionesService {
         publicacionesRepository.deleteById(id);
      }
 
-
+    public Optional<List<PublicacionGDTO>> getPublicacionesGuardadas(Integer id) {
+        return publicacionesRepository.findPublicacionesGuardada(id);
+    }
 }

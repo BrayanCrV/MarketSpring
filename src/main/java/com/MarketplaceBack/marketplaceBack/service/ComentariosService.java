@@ -25,7 +25,17 @@ public class ComentariosService {
     public List<Comentarios> getComentarioByPublicacion(Integer id){
         return comentariosRepository.findByIdPublicacion(id);
     }
-    public Optional<List<ComentarioDTO>> getComentariosWithNickname(Integer idPublicacion){
-        return comentariosRepository.findByPublicacionP(idPublicacion);
+    public Optional<List<ComentarioDTO>> getComentariosWithNickname(Long idPublicacion){
+        return comentariosRepository.findByPublicacionIDPublicacion(idPublicacion);
+    }
+    public boolean addComentario(Comentarios comentario){
+        try{
+            Comentarios savedComentario = comentariosRepository.save(comentario);
+            return savedComentario != null;
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 }

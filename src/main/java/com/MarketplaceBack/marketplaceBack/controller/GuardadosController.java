@@ -2,8 +2,10 @@ package com.MarketplaceBack.marketplaceBack.controller;
 
 import com.MarketplaceBack.marketplaceBack.models.Guardados;
 import com.MarketplaceBack.marketplaceBack.service.GuardadosService;
+import org.hibernate.query.NativeQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,19 +16,41 @@ public class GuardadosController {
     @Autowired
     GuardadosService guardadosService;
 
-    @GetMapping("/verificarGuardado")
-    public ResponseEntity<Boolean> verificarGuardado(
-            @RequestParam Integer idUsuario,
-            @RequestParam Integer idPublicacion) {
+    @GetMapping("/guardados/{idPublicacion}")
+    public ResponseEntity<?> verificarGuardado (@PathVariable Integer idPublicacion) {
+        String id = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+       Integer idUsuario = Integer.valueOf(id);
+        System.out.println(idUsuario);
         boolean existe = guardadosService.isPublicacionGuardada(idUsuario, idPublicacion);
         if(existe) {
-            return ResponseEntity.ok(existe);
+            return ResponseEntity.ok(true);
         } else {
-            return ResponseEntity.notFound().build();}
+            return ResponseEntity.ok(false);}
+
 
     }
-    @GetMapping("/guardados/{id}")
-    public ResponseEntity<List<Guardados>> getGuardados(@PathVariable Integer id) {
-        return  ResponseEntity.ok(guardadosService.obtenerGuardadosPorUsuario(id));
+    @GetMapping("/guardados")
+    public ResponseEntity<List<Guardados>> getGuardados() {
+        System.out.println("Holadd");
+        return ResponseEntity.ok().build();
+        //return  ResponseEntity.ok(guardadosService.obtenerGuardadosPorUsuario(id));
+    }
+    @DeleteMapping("/guardados/{idPublicacion}")
+    public ResponseEntity<?> eliminarGuardado(@PathVariable Integer idPublicacion) {
+        String id = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        Integer idUsuario = Integer.valueOf(id);
+        guardadosService.EliminarGuardado(idPublicacion, idUsuario);
+        return ResponseEntity.ok().body("Guardado eliminado correctamente");
+    }
+
+    @PostMapping("guardados/{idPublicacion}")
+    public ResponseEntity<?> guardarGuardado(@PathVariable Integer idPublicacion) {
+        String id = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        Integer idUsuario = Integer.valueOf(id);
+        Guardados  guardado = new Guardados();
+        guardado.setIdUsuario(idUsuario);
+        guardado.setIdPublicacion(idPublicacion);
+        guardado = guardadosService.guardarGuardados(guardado);
+        return ResponseEntity.ok().body(guardado);
     }
 }

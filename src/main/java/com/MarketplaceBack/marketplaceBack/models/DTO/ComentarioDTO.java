@@ -1,12 +1,19 @@
 package com.MarketplaceBack.marketplaceBack.models.DTO;
 
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
+
+import java.sql.Timestamp;
+
+
+@Data
+@AllArgsConstructor
 public class ComentarioDTO {
-    int id;
-    String nickname;
-    LocalDateTime fecha;
-    String comentario;
+    private Long id;
+    private String nickname;
+    private Timestamp fecha;
+    private String comentario;
 
 
 }

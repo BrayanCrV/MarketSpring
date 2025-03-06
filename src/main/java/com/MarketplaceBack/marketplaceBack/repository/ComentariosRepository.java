@@ -16,5 +16,7 @@ public interface ComentariosRepository extends JpaRepository<Comentarios, Intege
             "comentarios as c\n" +
             "left join usuarios as u on u.idUsuario = c.idUsuario\n" +
             "where c.idPublicacion = :idPublicacion", nativeQuery = true )
-    Optional<List<ComentarioDTO>> findByPublicacionP(Integer idPublicacion);
+    Optional<List<ComentarioDTO>> findByPublicacionIDPublicacion(Long idPublicacion);
+
+
 }
