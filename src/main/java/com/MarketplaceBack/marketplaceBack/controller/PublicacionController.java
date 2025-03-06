@@ -37,6 +37,13 @@ public class PublicacionController {
         return ResponseEntity.ok(publicacionesService.getAllPublicaciones());
     }
 
+    @GetMapping("/misPublicaciones")
+    public ResponseEntity<?> getMisPublicaciones() {
+        String id = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        Integer idUsuario = Integer.valueOf(id);
+        return ResponseEntity.ok(publicacionesService.getPublicacionesUsuario(idUsuario));
+    }
+
     @GetMapping("/publicaciones/{id}")
     public ResponseEntity<?> getPublicacionById(@PathVariable Integer id) {
         new PublicacionDTO();

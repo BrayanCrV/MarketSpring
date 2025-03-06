@@ -57,30 +57,25 @@ public class AuthServiceImpl implements IAuthService {
         try {
 
             ResponseDTO response = usuarioValidation.validate(usuario);
-
+            System.out.println("LLegue aqui");
             if (response.getNumOfErrors() == 0) {
-                List<Usuario> getAllUsers = usuarioService.getUsuarios();
-                for (Usuario existingUser : getAllUsers) {
-                    if (existingUser.getCorreo().equals(usuario.getCorreo())) {
-                        response.setMessage("El correo ya existe");
-                        return response;
-                    }
-                    if (existingUser.getNickname().equals(usuario.getNickname())) {
-                        response.setMessage("El usuario ya existe");
-                    }
-                    // Agrega más comparaciones de campos relevantes según sea necesario.
-                }
+                usuario.setVerificado(false);
                 BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
                 usuario.setPass(bCryptPasswordEncoder.encode(usuario.getPass()));
                 usuarioService.saveOrUpdate(usuario);
                 response.setMessage("Usuario registrado");
+                System.out.println("Usuario registrado");
+                return response;
+            }else {
+
                 return response;
             }
 
         } catch (Exception e) {
+            System.out.println("hubo pedillos");
             throw new Exception(e.toString());
         }
-        return null;
+
     }
 
     private boolean verifypassword(String enteredPassword, String confirmPassword){

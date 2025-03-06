@@ -29,7 +29,9 @@ public class UsuarioService {
     public Optional<Usuario> getUsuarioByNickname(String nickname) {
         return usuarioRepository.findByNickname(nickname);
     }
-
+    public Optional<Usuario> getUsuarioByEmail(String email) {
+        return usuarioRepository.findByEmail(email);
+    }
 
 
 }

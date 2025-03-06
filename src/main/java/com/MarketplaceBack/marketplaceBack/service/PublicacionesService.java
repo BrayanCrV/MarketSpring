@@ -36,4 +36,7 @@ public class PublicacionesService {
     public Optional<List<PublicacionGDTO>> getPublicacionesGuardadas(Integer id) {
         return publicacionesRepository.findPublicacionesGuardada(id);
     }
+    public Optional<List<Publicaciones>> getPublicacionesUsuario(Integer id) {
+        return publicacionesRepository.findPublicacionById(id);
+    }
 }

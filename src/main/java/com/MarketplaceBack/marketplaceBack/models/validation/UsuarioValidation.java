@@ -15,7 +15,16 @@ public class UsuarioValidation {
 
         if (usuarioService.getUsuarioByNickname(usuario.getNickname()).isPresent()) {
             responseDTO.setNumOfErrors(responseDTO.getNumOfErrors() +1);
-            responseDTO.setMessage("El nickname ya existe");
+            responseDTO.setMessage("El usuario que ingresaste se encuentra en uso");
+
+        }
+        if (usuarioService.getUsuarioByEmail(usuario.getCorreo()).isPresent()) {
+            responseDTO.setNumOfErrors(responseDTO.getNumOfErrors() +1);
+            responseDTO.setMessage("El correo que ingresaste se encuentra en uso");
+
+        }
+        if (responseDTO.getNumOfErrors() == 2){
+            responseDTO.setMessage("El correo y usuario que ingresaste se encuentra en uso");
         }
 
         return responseDTO;

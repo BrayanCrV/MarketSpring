@@ -22,5 +22,7 @@ public interface PublicacionesRepository extends JpaRepository<Publicaciones, In
             "JOIN publicaciones p ON g.idPublicacion = p.idPublicacion\n" +
             "    WHERE g.idUsuario = :idUsuario", nativeQuery = true)
     Optional<List<PublicacionGDTO>> findPublicacionesGuardada(Integer idUsuario);
+    @Query(value = "SELECT * FROM publicaciones where idUsuario = :idUsuario", nativeQuery = true)
+    Optional<List<Publicaciones>> findPublicacionById(Integer idUsuario);
 }
 
