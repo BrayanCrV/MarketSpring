@@ -57,7 +57,10 @@ public class PublicacionController {
 
     @PostMapping("/publicaciones")
     public ResponseEntity<?> addPublicacion(@RequestBody Publicaciones publicacion) {
-        publicacionesService.saveOrUpdatePublicacion(publicacion);
+        String id = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        Integer idUsuario = Integer.valueOf(id);
+        publicacion.setIdUsuario(idUsuario);
+        publicacionesService.savePublicacion(publicacion);
         return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(publicacion);
     }
 

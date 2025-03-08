@@ -32,3 +32,4 @@ src/main/resources/application.properties
 src/main/resources/jwtKeys/**
 ### VS Code ###
 .vscode/
+src/main/resources/Credentials/dataStorage.json

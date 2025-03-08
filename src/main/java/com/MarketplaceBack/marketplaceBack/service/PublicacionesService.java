@@ -23,7 +23,7 @@ public class PublicacionesService {
     public Optional<Publicaciones> getPublicacionById(Integer id) {
         return publicacionesRepository.findById(id);
     }
-    public void saveOrUpdatePublicacion(Publicaciones publicacion) {
+    public void savePublicacion(Publicaciones publicacion) {
         publicacionesRepository.save(publicacion);
      }
     public Optional<PublicacionDTO> getPublicacion(Integer ID) {
