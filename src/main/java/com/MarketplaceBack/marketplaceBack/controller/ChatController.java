@@ -18,13 +18,13 @@ public class ChatController {
     @Autowired
     ChatService chatService;
 
-    @GetMapping("/chat")
-    public ResponseEntity<?> getComentarios(){
-
-        return ResponseEntity.ok(chatService.getAllChats());
-    }
+//    @GetMapping("/chat")
+//    public ResponseEntity<?> getChats(){
+//
+//        return ResponseEntity.ok(chatService.getAllChats());
+//    }
     @PostMapping("/chat")
-    public ResponseEntity<?> addChat(@RequestBody Chat chat){
+    public ResponseEntity<?> addChat(@RequestBody Chat chat){ //guargar mensaJE
         System.out.println("Hola");
         String id = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         Integer idUsuario = Integer.valueOf(id);
@@ -33,21 +33,17 @@ public class ChatController {
         return ResponseEntity.ok(chat);
     }
 
-//    @MessageMapping("/chat")
-//    @SendTo("topic/message")
-//    public ResponseEntity<?> sendMessage(@Payload ChatMessage chat){
-//        chat.setFecha(new Date());
-//    }
+
     @GetMapping("/chatList")
-    public ResponseEntity<?> getAllChats(){
+    public ResponseEntity<?> getAllChats(){ //Lista de todas las conversaciones del usuario
         String id = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         Integer idUsuario = Integer.valueOf(id);
         return ResponseEntity.ok(chatService.chatList(idUsuario));
     }
 
     @GetMapping("/conversacion/{nickname2}")
-    public ResponseEntity<?> getConversasion(@PathVariable String nickname2){
-        String id = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+    public ResponseEntity<?> getConversasion(@PathVariable String nickname2){ // obtiene la conversacion de un usuario con una persona en especifico
+        String id = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString(); //Optiene el id del usuario
         Integer idUsuario = Integer.valueOf(id);
         return ResponseEntity.ok(chatService.getConversacion(idUsuario, nickname2));
     }

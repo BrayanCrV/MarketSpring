@@ -31,7 +31,7 @@ public class PublicacionController {
     @Autowired
     PublicacionesService publicacionesService;
 
-    @GetMapping("/publicaciones")
+    @GetMapping({"/un/publicaciones", "/publicaciones"})
     public ResponseEntity<?> getPublicaciones() {
 
         return ResponseEntity.ok(publicacionesService.getAllPublicaciones());
@@ -44,7 +44,7 @@ public class PublicacionController {
         return ResponseEntity.ok(publicacionesService.getPublicacionesUsuario(idUsuario));
     }
 
-    @GetMapping("/publicaciones/{id}")
+    @GetMapping({"/un/publicaciones/{id}", "/publicaciones/{id}"})
     public ResponseEntity<?> getPublicacionById(@PathVariable Integer id) {
         new PublicacionDTO();
         Optional<PublicacionDTO> publicacion;

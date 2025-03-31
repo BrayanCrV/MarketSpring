@@ -31,6 +31,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authRequest ->
                         authRequest
                                 .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers("/api/un/**").permitAll()
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() //Permitir Options
                                 .anyRequest().authenticated()
                 )

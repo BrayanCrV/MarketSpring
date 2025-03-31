@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, Integer> {
+    //Consulta que optiene el ultimo mensaje todas la conversaciones que tiene el usurario con diferentes personas
     @Query(value =
             "SELECT \n" +
                     "    CASE \n" +
@@ -45,7 +46,7 @@ public interface ChatRepository extends JpaRepository<Chat, Integer> {
                     "ORDER BY c.fecha DESC;",
             nativeQuery = true)
     Optional<List<ChatList>> findUltimosMensajesPorUsuario(@Param("usuarioID") Integer usuarioID);
-
+    //consulta que optiene todos los mensaje que tiene el usuario
     @Query(value = "SELECT \n" +
             "    c.mensaje,\n" +
             "    c.fecha,\n" +
@@ -53,7 +54,11 @@ public interface ChatRepository extends JpaRepository<Chat, Integer> {
             "    CASE \n" +
             "        WHEN c.idUsuario1 = :idUsuario THEN (SELECT nickname FROM usuarios WHERE idUsuario = :idUsuario LIMIT 1)\n" +
             "        ELSE :Nickname2\n" +
-            "    END AS remitenteNickname\n" +
+            "    END AS remitenteNickname,\n" +
+            "    CASE \n" +
+            "        WHEN c.idUsuario1 != :idUsuario THEN (SELECT nickname FROM usuarios WHERE idUsuario = :idUsuario LIMIT 1)\n" +
+            "        ELSE :Nickname2\n" +
+            "    END AS receptorNickname\n" +
             "FROM chat c\n" +
             "WHERE \n" +
             "    (c.idUsuario1 = :idUsuario \n" +
@@ -63,4 +68,5 @@ public interface ChatRepository extends JpaRepository<Chat, Integer> {
             "     AND c.idUsuario2 = :idUsuario)\n" +
             "ORDER BY c.fecha ASC", nativeQuery = true)
     Optional<List<ChatMessage>> findConversacion(Integer idUsuario, String Nickname2);
+
 }
