@@ -24,5 +24,16 @@ public interface PublicacionesRepository extends JpaRepository<Publicaciones, In
     Optional<List<PublicacionGDTO>> findPublicacionesGuardada(Integer idUsuario);
     @Query(value = "SELECT * FROM publicaciones where idUsuario = :idUsuario", nativeQuery = true)
     Optional<List<Publicaciones>> findPublicacionById(Integer idUsuario);
+
+    List<Publicaciones> findAllByOrderByNombreAsc();
+
+    List<Publicaciones> findAllByOrderByFechaDesc();
+
+    @Query(value="SELECT * \n" +
+            "    FROM Publicaciones\n" +
+            "    WHERE LOWER(Nombre) LIKE LOWER(CONCAT('%', :busqueda, '%'));", nativeQuery = true)
+    Optional<List<Publicaciones>> PublicacionesPorBusqueda(String busqueda);
+
+
 }
 

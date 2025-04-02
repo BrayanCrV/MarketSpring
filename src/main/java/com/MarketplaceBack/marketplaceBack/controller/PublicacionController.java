@@ -2,11 +2,9 @@ package com.MarketplaceBack.marketplaceBack.controller;
 
 import com.MarketplaceBack.marketplaceBack.models.DTO.PublicacionDTO;
 import com.MarketplaceBack.marketplaceBack.models.Publicaciones;
-import com.MarketplaceBack.marketplaceBack.models.Usuario;
 import com.MarketplaceBack.marketplaceBack.repository.PublicacionesRepository;
 import com.MarketplaceBack.marketplaceBack.service.PublicacionesService;
 
-import com.nimbusds.jwt.JWTClaimsSet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,12 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.function.EntityResponse;
-
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -43,8 +37,23 @@ public class PublicacionController {
         Integer idUsuario = Integer.valueOf(id);
         return ResponseEntity.ok(publicacionesService.getPublicacionesUsuario(idUsuario));
     }
+    @GetMapping({"/Publicaciones/{orden}", "/un/Publicaciones/{orden}"})
+    public ResponseEntity<?> getPublicacionesOrdenadas(@PathVariable Integer orden) {
+        if (orden == 1) {
+            return ResponseEntity.ok(publicacionesService.GetPublicacionesOrdenado());
+        }
+        else {
+            return ResponseEntity.ok(publicacionesService.GetPublicacionesRecientes());
+        }
+    }
 
-    @GetMapping({"/un/publicaciones/{id}", "/publicaciones/{id}"})
+    @GetMapping({"/BuscarPublicaciones/{busqueda}", "/un/BuscarPublicaciones/{busqueda}"})
+    public ResponseEntity<?> BuscarPublicaciones(@PathVariable String busqueda){
+        return ResponseEntity.ok(publicacionesRepository.PublicacionesPorBusqueda(busqueda));
+    }
+
+
+    @GetMapping({"/un/publicacion/{id}", "/publicacion/{id}"})
     public ResponseEntity<?> getPublicacionById(@PathVariable Integer id) {
         new PublicacionDTO();
         Optional<PublicacionDTO> publicacion;

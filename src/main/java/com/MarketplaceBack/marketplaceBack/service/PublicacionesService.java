@@ -20,6 +20,13 @@ public class PublicacionesService {
     public List<Publicaciones> getAllPublicaciones() {
         return publicacionesRepository.findAll();
     }
+    public List<Publicaciones> GetPublicacionesRecientes() {
+        return publicacionesRepository.findAllByOrderByFechaDesc();
+    }
+    public List<Publicaciones> GetPublicacionesOrdenado() {
+
+        return publicacionesRepository.findAllByOrderByNombreAsc();
+    }
     public Optional<Publicaciones> getPublicacionById(Integer id) {
         return publicacionesRepository.findById(id);
     }
@@ -38,5 +45,8 @@ public class PublicacionesService {
     }
     public Optional<List<Publicaciones>> getPublicacionesUsuario(Integer id) {
         return publicacionesRepository.findPublicacionById(id);
+    }
+    public Optional<List<Publicaciones>> BuscarPublicaciones(String busqueda) {
+        return publicacionesRepository.PublicacionesPorBusqueda(busqueda);
     }
 }
