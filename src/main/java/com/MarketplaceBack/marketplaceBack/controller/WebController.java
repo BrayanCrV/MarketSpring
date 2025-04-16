@@ -1,13 +1,14 @@
 package com.MarketplaceBack.marketplaceBack.controller;
 
+import com.google.api.gax.paging.Page;
 import com.google.cloud.spring.storage.GoogleStorageResource;
-import com.google.cloud.storage.Acl;
-import com.google.cloud.storage.BlobId;
-import com.google.cloud.storage.BlobInfo;
-import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.*;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/gcs") // Se establece un prefijo para las rutas de este controlador
+@RequestMapping("/api/un/gcs") // Se establece un prefijo para las rutas de este controlador
 public class WebController {
 
     // Se obtiene el nombre del bucket desde application.properties
@@ -68,31 +69,58 @@ public class WebController {
         return updateResource(
                 filename.map(this::fetchResource).orElse((GoogleStorageResource) this.gcsFile), data);
     }
+
+
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file,
-                                             @RequestParam("filename") String filename) {
+                                             @RequestParam("folder") String folder) {
         try {
-            // Crear el recurso de almacenamiento en GCS
-            GoogleStorageResource resource = fetchResource(filename);
+            // Validar si el archivo es una imagen
+            String contentType = file.getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Solo se permiten archivos de imagen.");
+            }
 
-            // Subir el archivo al bucket
+            String originalFilename = file.getOriginalFilename().replaceAll("\\s+", "_");
+            String blobName = folder + "/" + originalFilename;
+
+            String gsUri = "gs://" + bucketName + "/" + blobName;
+            GoogleStorageResource resource = new GoogleStorageResource(storage, gsUri, true);
+
             try (OutputStream os = resource.getOutputStream()) {
                 os.write(file.getBytes());
             }
 
-            // Hacer el archivo público
-            BlobId blobId = BlobId.of(bucketName, filename);
-            BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
+            // Hacer público
+            BlobId blobId = BlobId.of(bucketName, blobName);
             storage.createAcl(blobId, Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER));
 
-            // Generar la URL pública del archivo
-            String fileUrl = String.format("https://storage.googleapis.com/%s/%s", bucketName, filename);
+            String folderUrl = String.format("https://storage.googleapis.com/%s/%s/", bucketName, folder);
+            return ResponseEntity.ok("Archivo subido correctamente");
 
-            return ResponseEntity.ok(fileUrl);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al subir el archivo: " + e.getMessage());
         }
+    }
+
+
+
+    // Listar archivos dentro de una carpeta
+    @GetMapping("mostrarArchivos")
+    public ResponseEntity<List<String>> listFiles(@RequestParam("folder") String folder) {
+        List<String> fileUrls = new ArrayList<>();
+
+        Page<Blob> blobs = storage.list(bucketName, Storage.BlobListOption.prefix(folder + "/"));
+        for (Blob blob : blobs.iterateAll()) {
+            if (!blob.isDirectory()) {
+                String publicUrl = String.format("https://storage.googleapis.com/%s/%s", bucketName, blob.getName());
+                fileUrls.add(publicUrl);
+            }
+        }
+
+        return ResponseEntity.ok(fileUrls);
     }
 
     /**
@@ -117,6 +145,6 @@ public class WebController {
      */
     private GoogleStorageResource fetchResource(String filename) {
         return new GoogleStorageResource(
-                this.storage, String.format("gs://%s/%s", this.bucketName, filename));
+                this.storage, String.format("gs://%s/%s", this.bucketName,  filename));
     }
 }
