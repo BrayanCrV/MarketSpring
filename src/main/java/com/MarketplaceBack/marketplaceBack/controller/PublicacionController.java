@@ -52,7 +52,6 @@ public class PublicacionController {
         return ResponseEntity.ok(publicacionesRepository.PublicacionesPorBusqueda(busqueda));
     }
 
-
     @GetMapping({"/un/publicacion/{id}", "/publicacion/{id}"})
     public ResponseEntity<?> getPublicacionById(@PathVariable Integer id) {
         new PublicacionDTO();

@@ -57,13 +57,13 @@ public class JWTUtilityServiceImpl implements IJWTUtilityService {
         SignedJWT signedJWT = SignedJWT.parse(jwt);
         JWSVerifier verifier = new RSASSAVerifier((RSAPublicKey) publicKey);
         if(!signedJWT.verify(verifier)){
-            System.out.println("JWT verification failed");
+
             throw new JOSEException("Invalid signature");
         }
         JWTClaimsSet claimsSet = signedJWT.getJWTClaimsSet();
 
         if (claimsSet.getExpirationTime().before(new Date())) {
-            System.out.println("JWT expired");
+
             throw new JOSEException("Expired Token");
 
         }
