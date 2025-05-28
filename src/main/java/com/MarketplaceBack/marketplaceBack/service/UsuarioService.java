@@ -1,9 +1,11 @@
 package com.MarketplaceBack.marketplaceBack.service;
 
+import com.MarketplaceBack.marketplaceBack.models.DTO.DireccionDTO;
 import com.MarketplaceBack.marketplaceBack.models.Usuario;
 import com.MarketplaceBack.marketplaceBack.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,5 +35,16 @@ public class UsuarioService {
         return usuarioRepository.findByEmail(email);
     }
 
+    @Transactional
+    public void actualizarDireccion(Integer idUsuario, DireccionDTO direccionDTO) {
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
+        usuario.setCalle(direccionDTO.getCalle());
+        usuario.setColonia(direccionDTO.getColonia());
+        usuario.setLote(direccionDTO.getLote());
+        usuario.setMunicipio(direccionDTO.getMunicipio());
+
+        usuarioRepository.save(usuario);
+    }
 }

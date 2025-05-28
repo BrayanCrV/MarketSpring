@@ -20,10 +20,12 @@ public class ComentariosController {
     @Autowired
     ComentariosService comentariosService;
 
+    /**
+     *
+     * @return 
+     */
     @GetMapping("/comentarios")
     public ResponseEntity<?> getComentarios(){
-
-        System.out.println("TODOS");
         return ResponseEntity.ok(comentariosService.getComentarios());
     }
 
@@ -37,7 +39,7 @@ public class ComentariosController {
         return ResponseEntity.notFound().build();
 
     }
-    @GetMapping("/comentariosP/{id}")
+    @GetMapping({"/comentariosP/{id}","/un/comentariosP/{id}"})
     public ResponseEntity<?> getComentariosByPublicacion(@PathVariable Integer id){
 
         return ResponseEntity.ok(comentariosService.getComentarioByPublicacion(id));
@@ -51,10 +53,8 @@ public class ComentariosController {
         boolean isSaved = comentariosService.addComentario(comentario);
 
         if (isSaved) {
-            // Si se guardó correctamente, devolvemos 201 Created con un mensaje
             return ResponseEntity.status(HttpStatus.CREATED).body("Comentario guardado exitosamente");
         } else {
-            // Si hubo un error, devolvemos 500 Internal Server Error con un mensaje
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo guardar el comentario");
         }
     }

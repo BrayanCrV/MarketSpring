@@ -20,7 +20,6 @@ public class GuardadosController {
     public ResponseEntity<?> verificarGuardado (@PathVariable Integer idPublicacion) {
         String id = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
        Integer idUsuario = Integer.valueOf(id);
-        System.out.println(idUsuario);
         boolean existe = guardadosService.isPublicacionGuardada(idUsuario, idPublicacion);
         if(existe) {
             return ResponseEntity.ok(true);
@@ -31,7 +30,6 @@ public class GuardadosController {
     }
     @GetMapping("/guardados")
     public ResponseEntity<List<Guardados>> getGuardados() {
-        System.out.println("Holadd");
         return ResponseEntity.ok().build();
         //return  ResponseEntity.ok(guardadosService.obtenerGuardadosPorUsuario(id));
     }

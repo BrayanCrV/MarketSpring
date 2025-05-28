@@ -57,14 +57,13 @@ public class AuthServiceImpl implements IAuthService {
         try {
 
             ResponseDTO response = usuarioValidation.validate(usuario);
-            System.out.println("LLegue aqui");
             if (response.getNumOfErrors() == 0) {
                 usuario.setVerificado(false);
                 BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
                 usuario.setPass(bCryptPasswordEncoder.encode(usuario.getPass()));
                 usuarioService.saveOrUpdate(usuario);
                 response.setMessage("Usuario registrado");
-                System.out.println("Usuario registrado");
+
                 return response;
             }else {
 
@@ -72,7 +71,7 @@ public class AuthServiceImpl implements IAuthService {
             }
 
         } catch (Exception e) {
-            System.out.println("hubo pedillos");
+
             throw new Exception(e.toString());
         }
 

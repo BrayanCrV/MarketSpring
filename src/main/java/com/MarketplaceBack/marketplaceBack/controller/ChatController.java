@@ -14,18 +14,20 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
+/**
+ *
+ */
 public class ChatController {
     @Autowired
     ChatService chatService;
 
-//    @GetMapping("/chat")
-//    public ResponseEntity<?> getChats(){
-//
-//        return ResponseEntity.ok(chatService.getAllChats());
-//    }
+    /**
+     * Recibe un Mensaje
+     * @param chat Mensaje a guardar
+     * @return
+     */
     @PostMapping("/chat")
     public ResponseEntity<?> addChat(@RequestBody Chat chat){ //guargar mensaJE
-        System.out.println("Hola");
         String id = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         Integer idUsuario = Integer.valueOf(id);
         chat.setIdUsuario1(idUsuario);
