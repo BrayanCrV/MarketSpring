@@ -20,30 +20,33 @@ public interface ChatRepository extends JpaRepository<Chat, Integer> {
                     "        WHEN c.idUsuario1 = :usuarioID THEN u2.nickname \n" +
                     "        ELSE u1.nickname \n" +
                     "    END AS nickname2,\n" +
+                    "\n" +
                     "    c.mensaje,\n" +
                     "    c.fecha,\n" +
+                    "\n" +
                     "    CASE \n" +
                     "        WHEN c.idUsuario1 = :usuarioID THEN c.idUsuario2\n" +
                     "        ELSE c.idUsuario1\n" +
                     "    END AS otroUsuarioID,\n" +
-                    "    CASE \n" +
-                    "        WHEN c.idUsuario1 = :usuarioID THEN u1.nickname \n" +
-                    "        ELSE u2.nickname \n" +
-                    "    END AS enviadoPor\n" +
+                    "\n" +
+                    "    u1.nickname AS enviadoPor\n" +
+                    "\n" +
                     "FROM chat c\n" +
                     "JOIN usuarios u1 ON c.idUsuario1 = u1.idUsuario\n" +
                     "JOIN usuarios u2 ON c.idUsuario2 = u2.idUsuario\n" +
-                    "WHERE (c.idUsuario1 = :usuarioID OR c.idUsuario2 = :usuarioID)\n" +
-                    "  AND c.id = (\n" +
-                    "      SELECT MAX(c2.id)\n" +
-                    "      FROM chat c2\n" +
-                    "      WHERE (c2.idUsuario1 = :usuarioID OR c2.idUsuario2 = :usuarioID)\n" +
-                    "        AND (\n" +
-                    "            (c2.idUsuario1 = c.idUsuario1 AND c2.idUsuario2 = c.idUsuario2)\n" +
-                    "            OR (c2.idUsuario1 = c.idUsuario2 AND c2.idUsuario2 = c.idUsuario1)\n" +
-                    "        )\n" +
-                    "  )\n" +
-                    "ORDER BY c.fecha DESC;",
+                    "WHERE \n" +
+                    "    (c.idUsuario1 = :usuarioID OR c.idUsuario2 = :usuarioID)\n" +
+                    "    AND c.id = (\n" +
+                    "        SELECT MAX(c2.id)\n" +
+                    "        FROM chat c2\n" +
+                    "        WHERE \n" +
+                    "            (c2.idUsuario1 = :usuarioID OR c2.idUsuario2 = :usuarioID)\n" +
+                    "            AND (\n" +
+                    "                (c2.idUsuario1 = c.idUsuario1 AND c2.idUsuario2 = c.idUsuario2)\n" +
+                    "                OR (c2.idUsuario1 = c.idUsuario2 AND c2.idUsuario2 = c.idUsuario1)\n" +
+                    "            )\n" +
+                    "    )\n" +
+                    "ORDER BY c.fecha DESC;\n",
             nativeQuery = true)
     Optional<List<ChatList>> findUltimosMensajesPorUsuario(@Param("usuarioID") Integer usuarioID);
     //consulta que optiene todos los mensaje que tiene el usuario
